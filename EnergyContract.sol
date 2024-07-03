@@ -2,7 +2,7 @@
 // Compatible with OpenZeppelin Contracts ^5.0.0
 pragma solidity ^0.8.20;
 
-contract EnergyMarket {
+contract energyMarket {
     mapping (address => Vendor) public vendors;
 
     address owner;
@@ -23,7 +23,7 @@ contract EnergyMarket {
     }
 
 
-    function BuyEnergy(address vendor, uint amount) external payable {
+    function buyEnergy(address vendor, uint amount) external payable {
         uint price;
         if(vendors[vendor].dailyCapacity >= amount) {
             vendors[vendor].dailyCapacity = vendors[vendor].dailyCapacity - amount;
@@ -46,7 +46,7 @@ contract EnergyMarket {
         }
     }
 
-    function AddVendor ( address newVendor, uint newCapacity, uint newTax) public {
+    function addVendor ( address newVendor, uint newCapacity, uint newTax) public {
         require( msg.sender == owner );
             vendors[newVendor].dailyCapacity = newCapacity;
             vendors[newVendor].dailyCapacity = newTax;
@@ -56,10 +56,6 @@ contract EnergyMarket {
 
     function Withdraw() public payable {
          payable(msg.sender).transfer(vendors[msg.sender].saldo);
-    }
-
-    function RemoveVendor() public{
-        /*nao da p fz isso no front?*/
     }
 
 }
