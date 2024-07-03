@@ -14,6 +14,7 @@ contract EnergyMarket {
         uint dailyCapacity; // Média
        // string name;
       //  uint power;
+        uint id;
         
     }
 
@@ -53,12 +54,12 @@ contract EnergyMarket {
         
     }
 
-    function Withdraw() public {
-        
+    function Withdraw() public payable {
+         payable(msg.sender).transfer(vendors[msg.sender].saldo);
     }
 
     function RemoveVendor() public{
-        
+        /*nao da p fz isso no front?*/
     }
 
 }
