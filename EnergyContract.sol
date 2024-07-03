@@ -45,7 +45,11 @@ contract EnergyMarket {
         }
     }
 
-    function AddVendor() public {
+    function AddVendor ( address newVendor, uint newCapacity, uint newTax) public {
+        require( msg.sender == owner );
+            vendors[newVendor].dailyCapacity = newCapacity;
+            vendors[newVendor].dailyCapacity = newTax;
+            vendors[newVendor].saldo = 0;
         
     }
 
