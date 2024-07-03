@@ -14,6 +14,7 @@ contract EnergyMarket {
         uint dailyCapacity; // Média
        // string name;
       //  uint power;
+        uint price;
     }
 
     constructor() {
@@ -21,11 +22,25 @@ contract EnergyMarket {
     }
 
 
-    function BuyEnergy(address vendor,) external payable {
+    function BuyEnergy(address vendor, uint amount) external payable {
 
+        if(vendor.dailyCapacity >= amount) {
+            dailyCapacity = dailyCapacity - amount;
+            price = amount * x // x é o preço do kW;
+        }
 
-        if( dailyCapacity > 0) {
-            daily Capacity = dailyCapacity - x;
+        if(vendor.dailyCapacity < amount) {
+            price = dailyCapacity * x;
+            amount = amount - dailyCapacity;
+            price = price + amount * tax * x;
+        }
+
+        require(msg.value >= price, "Insufficient funds sent");
+        vend.saldo += price;
+        vend.dailyCapacity = vend.dailyCapacity >= amount ? vend.dailyCapacity - amount : 0;
+
+        if (msg.value > price) {
+            payable(msg.sender).transfer(msg.value - price);
         }
     }
 
