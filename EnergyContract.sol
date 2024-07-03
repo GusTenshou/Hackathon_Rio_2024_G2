@@ -3,10 +3,10 @@
 pragma solidity ^0.8.20;
 
 contract EnergyMarket {
-    mapping(address => Vendor) public vendors;
+    mapping (address => Vendor) public vendors;
 
     address owner;
-
+    uint energyCost;
     struct Vendor {                     
         uint saldo;
        // string place;
@@ -14,7 +14,7 @@ contract EnergyMarket {
         uint dailyCapacity; // Média
        // string name;
       //  uint power;
-        uint price;
+        
     }
 
     constructor() {
@@ -23,36 +23,37 @@ contract EnergyMarket {
 
 
     function BuyEnergy(address vendor, uint amount) external payable {
-
-        if(vendor.dailyCapacity >= amount) {
-            dailyCapacity = dailyCapacity - amount;
-            price = amount * x;  // x é o preço do kW;
+        uint price;
+        if(vendors[vendor].dailyCapacity >= amount) {
+            vendors[vendor].dailyCapacity = vendors[vendor].dailyCapacity - amount;
+            price = amount * energyCost; // x é o preço do kW
+            vendors[vendor].dailyCapacity -= amount;
         }
-
-        if(vendor.dailyCapacity < amount) {
-            price = dailyCapacity * x;
-            amount = amount - dailyCapacity;
-            price = price + amount * tax * x;
+            else {
+            price = vendors[vendor].dailyCapacity * energyCost;
+            amount -= vendors[vendor].dailyCapacity;
+            price += amount * vendors[vendor].tax * energyCost;
+            vendors[vendor].dailyCapacity = 0;
         }
 
         require(msg.value >= price, "Insufficient funds sent");
-        vend.saldo += price;
-        vend.dailyCapacity = vend.dailyCapacity >= amount ? vend.dailyCapacity - amount : 0;
-
-        if (msg.value > price) {
+        vendors[vendor].saldo += price;
+    
+    
+        if (msg.value > price) { /* TROCO */
             payable(msg.sender).transfer(msg.value - price);
         }
     }
 
-    function AddVendor() -> a {
+    function AddVendor() public {
         
     }
 
-    function Withdraw() -> a {
+    function Withdraw() public {
         
     }
 
-    function RemoveVendor() {
+    function RemoveVendor() public{
         
     }
 
