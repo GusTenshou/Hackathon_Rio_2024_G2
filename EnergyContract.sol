@@ -26,7 +26,7 @@ contract EnergyMarket {
 
         if(vendor.dailyCapacity >= amount) {
             dailyCapacity = dailyCapacity - amount;
-            price = amount * x // x é o preço do kW;
+            price = amount * x;  // x é o preço do kW;
         }
 
         if(vendor.dailyCapacity < amount) {
