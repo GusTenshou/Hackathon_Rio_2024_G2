@@ -54,6 +54,7 @@ contract energyMarket {
     function addVendor ( address newVendor, uint newCapacity, uint newTax) public {
         require( msg.sender == owner, "You need to be the owner to do this" );
             vendors[newVendor].dailyCapacity = newCapacity;
+            vendors[newVendor].tax = newTax;
             vendors[newVendor].dailyCapacity = newTax;
             vendors[newVendor].saldo = 0;
         
