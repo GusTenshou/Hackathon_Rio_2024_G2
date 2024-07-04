@@ -64,4 +64,8 @@ contract energyMarket {
          payable(msg.sender).transfer(vendors[msg.sender].saldo);
     }
 
+    function setEnergyCost(uint newEnergyCost) public {
+        require(msg.sender == owner);
+        energyCost = newEnergyCost;
+    }
 }
