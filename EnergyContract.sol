@@ -55,7 +55,6 @@ contract energyMarket {
         require( msg.sender == owner, "You need to be the owner to do this" );
             vendors[newVendor].dailyCapacity = newCapacity;
             vendors[newVendor].tax = newTax;
-            vendors[newVendor].dailyCapacity = newTax;
             vendors[newVendor].saldo = 0;
         
     }
