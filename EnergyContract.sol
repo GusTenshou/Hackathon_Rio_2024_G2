@@ -2,11 +2,11 @@
 // Compatible with OpenZeppelin Contracts ^5.0.0
 pragma solidity ^0.8.20;
 
-contract EnergyMarket {
-    mapping(address => Vendor) public vendors;
+contract energyMarket {
+    mapping (address => Vendor) public vendors;
 
     address owner;
-
+    uint energyCost;
     struct Vendor {                     
         uint saldo;
        // string place;
@@ -14,7 +14,8 @@ contract EnergyMarket {
         uint dailyCapacity; // Média
        // string name;
       //  uint power;
-        uint price;
+        uint id;
+        
     }
 
     constructor() {
@@ -22,38 +23,53 @@ contract EnergyMarket {
     }
 
 
-    function BuyEnergy(address vendor, uint amount) external payable {
-
-        if(vendor.dailyCapacity >= amount) {
-            dailyCapacity = dailyCapacity - amount;
-            price = amount * x // x é o preço do kW;
+    function buyEnergy(address vendor, uint amount) external payable {
+        uint price;
+        if(vendors[vendor].dailyCapacity >= amount) {
+            vendors[vendor].dailyCapacity = vendors[vendor].dailyCapacity - amount;
+            price = amount * energyCost; // x é o preço do kW
+            vendors[vendor].dailyCapacity -= amount;
         }
-
-        if(vendor.dailyCapacity < amount) {
-            price = dailyCapacity * x;
-            amount = amount - dailyCapacity;
-            price = price + amount * tax * x;
+            else {
+            price = vendors[vendor].dailyCapacity * energyCost;
+            amount -= vendors[vendor].dailyCapacity;
+            price += amount * vendors[vendor].tax * energyCost;
+            vendors[vendor].dailyCapacity = 0;
         }
 
         require(msg.value >= price, "Insufficient funds sent");
-        vend.saldo += price;
-        vend.dailyCapacity = vend.dailyCapacity >= amount ? vend.dailyCapacity - amount : 0;
-
-        if (msg.value > price) {
+        vendors[vendor].saldo += price;
+    
+    
+        if (msg.value > price) { /* TROCO */
             payable(msg.sender).transfer(msg.value - price);
         }
     }
 
-    function AddVendor() -> a {
+    function changeCapacity(address vendorAddress, uint newCapacity) public{
+        require(msg.sender == vendorAddress, "Incorrect address");
+        vendors[vendorAddress].dailyCapacity = newCapacity;
+    }
+
+    function addVendor ( address newVendor, uint newCapacity, uint newTax) public {
+        require( msg.sender == owner, "You need to be the owner to do this" );
+            vendors[newVendor].dailyCapacity = newCapacity;
+            vendors[newVendor].tax = newTax;
+            vendors[newVendor].saldo = 0;
         
     }
 
-    function Withdraw() -> a {
-        
+    function Withdraw() public payable {
+         payable(msg.sender).transfer(vendors[msg.sender].saldo);
     }
 
-    function RemoveVendor() {
-        
+    function setEnergyCost(uint newEnergyCost) public {
+        require(msg.sender == owner, "You need to be the owner to do this" );
+        energyCost = newEnergyCost;
     }
 
+    function setTax(address vendorAddress, uint newTax) public {
+        require(msg.sender == vendorAddress, "Incorrect addres");
+        vendors[vendorAddress].tax = newTax;
+    }
 }
