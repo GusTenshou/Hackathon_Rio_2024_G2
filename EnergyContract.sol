@@ -46,8 +46,14 @@ contract energyMarket {
         }
     }
 
+    function changeCapacity(address vendorAddress, uint newCapacity) public{
+        require(msg.sender == vendorAddress, "Incorrect address");
+        vendors[vendorAddress].dailyCapacity = newCapacity;
+    }
+
+
     function addVendor ( address newVendor, uint newCapacity, uint newTax) public {
-        require( msg.sender == owner );
+        require( msg.sender == owner, "You need to be the owner to do this" );
             vendors[newVendor].dailyCapacity = newCapacity;
             vendors[newVendor].dailyCapacity = newTax;
             vendors[newVendor].saldo = 0;
