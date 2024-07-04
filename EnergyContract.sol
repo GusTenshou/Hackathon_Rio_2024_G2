@@ -67,4 +67,9 @@ contract energyMarket {
         require(msg.sender == owner, "You need to be the owner to do this" );
         energyCost = newEnergyCost;
     }
+
+    function setTax(address vendorAddress, uint newTax) public {
+        require(msg.sender == vendorAddress, "Incorrect addres");
+        vendors[vendorAddress].tax = newTax;
+    }
 }
