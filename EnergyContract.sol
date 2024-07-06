@@ -9,32 +9,29 @@ contract energyMarket {
     uint energyCost;
     struct Vendor {                     
         uint saldo;
-       // string place;
         uint tax;
         uint dailyCapacity; // Média
-       // string name;
-      //  uint power;
-        uint id;
-        
+        uint remainingCapacity;
     }
 
-    constructor() {
+    constructor( uint _energyCost ) {
+        energyCost = _energyCost;
         owner = msg.sender;
     }
 
 
     function buyEnergy(address vendor, uint amount) external payable {
         uint price;
-        if(vendors[vendor].dailyCapacity >= amount) {
-            vendors[vendor].dailyCapacity = vendors[vendor].dailyCapacity - amount;
-            price = amount * energyCost; // x é o preço do kW
-            vendors[vendor].dailyCapacity -= amount;
+        if(vendors[vendor].remainingCapacity >= amount) {
+            vendors[vendor].remainingCapacity = vendors[vendor].remainingCapacity - amount;
+            price = amount * energyCost;
+            vendors[vendor].remainingCapacity -= amount;
         }
             else {
-            price = vendors[vendor].dailyCapacity * energyCost;
-            amount -= vendors[vendor].dailyCapacity;
+            price = vendors[vendor].remainingCapacity * energyCost;
+            amount -= vendors[vendor].remainingCapacity;
             price += amount * vendors[vendor].tax * energyCost;
-            vendors[vendor].dailyCapacity = 0;
+            vendors[vendor].remainingCapacity = 0;
         }
 
         require(msg.value >= price, "Insufficient funds sent");
@@ -55,6 +52,7 @@ contract energyMarket {
         require( msg.sender == owner, "You need to be the owner to do this" );
             vendors[newVendor].dailyCapacity = newCapacity;
             vendors[newVendor].tax = newTax;
+            vendors[newVendor].remainingCapacity = newCapacity;
             vendors[newVendor].saldo = 0;
         
     }
